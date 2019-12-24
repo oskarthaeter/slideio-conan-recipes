@@ -10,10 +10,10 @@ class GDALConanFile(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     description = "GDAL Library."
     short_paths = True
-    requires =  "sqlite3/3.29.0@bincrafters/stable", \
+    requires =  "sqlite3/3.29.0", \
                 "proj/6.2.1@local/stable", \
-                "jasper/2.0.14@conan/stable", \
-                "libjpeg/9c@bincrafters/stable", \
+                "jasper/2.0.14", \
+                "libjpeg/9c", \
                 "libtiff/4.0.10@local/stable"
 
     def source(self):

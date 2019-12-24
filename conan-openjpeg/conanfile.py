@@ -18,9 +18,9 @@ class OpenjpegConan(ConanFile):
 
     _source_subfolder = "source_subfolder"
 
-    requires =  "zlib/1.2.11@conan/stable", \
+    requires =  "zlib/1.2.11", \
                 "libtiff/4.0.10@local/stable", \
-                "libpng/1.6.37@bincrafters/stable", \
+                "libpng/1.6.37", \
                 "lcms/2.9@bincrafters/stable"
     def config_options(self):
         if self.settings.os == "Windows":

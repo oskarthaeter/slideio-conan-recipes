@@ -42,22 +42,22 @@ class OpenjpegConan(ConanFile):
         cmake.definitions['CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP'] = True
         cmake.definitions['BUILD_CODEC'] = False
 
+        libs = ["zlib","libtiff","lcms"]
+        lib_names = {}
+        for lib in libs:
+            if self.settings.os == "Windows":
+                lib_names[lib] = self.deps_cpp_info[lib].libs[0] + ".lib"
+            else:
+                lib_names[lib] = "lib" + self.deps_cpp_info[lib].libs[0] + ".a"
 
         cmake.definitions['ZLIB_INCLUDE_DIR'] =  self.deps_cpp_info["zlib"].include_paths[0]
-        cmake.definitions['ZLIB_LIBRARY'] =  os.path.join(self.deps_cpp_info["zlib"].lib_paths[0],
-                self.deps_cpp_info["zlib"].libs[0]+'.lib')
+        cmake.definitions['ZLIB_LIBRARY'] =  os.path.join(self.deps_cpp_info["zlib"].lib_paths[0], lib_names["zlib"])
 
         cmake.definitions['TIFF_INCLUDE_DIR'] =  self.deps_cpp_info["libtiff"].include_paths[0]
-        cmake.definitions['TIFF_LIBRARY'] =  os.path.join(self.deps_cpp_info["libtiff"].lib_paths[0],
-                self.deps_cpp_info["libtiff"].libs[0]+'.lib')
+        cmake.definitions['TIFF_LIBRARY'] =  os.path.join(self.deps_cpp_info["libtiff"].lib_paths[0], lib_names["libtiff"])
 
         cmake.definitions['LCMS_INCLUDE_DIR'] =  self.deps_cpp_info["lcms"].include_paths[0]
-        cmake.definitions['LCMS_LIBRARY'] =  os.path.join(self.deps_cpp_info["lcms"].lib_paths[0],
-                self.deps_cpp_info["lcms"].libs[0]+'.lib')
-
-#        cmake.definitions['LCMS2_INCLUDE_DIR'] =  self.deps_cpp_info["lcms2"].include_paths[0]
-#        cmake.definitions['LCMS2_LIBRARY'] =  os.path.join(self.deps_cpp_info["lcms2"].lib_paths[0],
-#                self.deps_cpp_info["lcms2"].libs[0]+'.lib')
+        cmake.definitions['LCMS_LIBRARY'] =  os.path.join(self.deps_cpp_info["lcms"].lib_paths[0], lib_names["lcms"])
 
         cmake.configure()
         return cmake

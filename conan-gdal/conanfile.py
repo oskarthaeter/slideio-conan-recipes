@@ -1,12 +1,12 @@
-from conans import ConanFile, tools, VisualStudioBuildEnvironment
+from conans import ConanFile, tools, VisualStudioBuildEnvironment, AutoToolsBuildEnvironment
 import os
+import shutil
 
 
 class GDALConanFile(ConanFile):
     name = "gdal"
     version = "3.0.2"
     license = "MIT"
-    generators = "visual_studio_multi"
     settings = "os", "arch", "compiler", "build_type"
     description = "GDAL Library."
     short_paths = True
@@ -19,7 +19,30 @@ class GDALConanFile(ConanFile):
     def source(self):
         git = tools.Git()
         git.clone("https://github.com/OSGeo/gdal.git", "v{0}".format(self.version))
+
     def build(self):
+        if self.settings.os == "Windows":
+            self.build_Windows()
+        else:
+            self.build_Linux()
+
+    def build_Linux(self):
+        autotools = AutoToolsBuildEnvironment(self)
+        env_build_vars = autotools.vars
+        autotools.library_paths.append(self.deps_cpp_info["proj"].lib_paths[0])
+        autotools.library_paths.append(self.deps_cpp_info["sqlite3"].lib_paths[0])
+        autotools.libs.append(self.deps_cpp_info["sqlite3"].libs[0])
+        install_dir = os.path.join(self.build_folder,"install")
+        options = ["--prefix="+install_dir, "--enable-shared=no", "--enable-static=yes"]
+        if self.settings.build_type == "Debug":
+            options.append("--enable-debug=yes")
+        os.chdir("gdal")
+        autotools.configure(args=options,vars=env_build_vars)
+        autotools.make()
+        autotools.install()
+        os.chdir("../")
+
+    def build_Windows(self):
         if self.settings.os == 'Windows':
             env_build = VisualStudioBuildEnvironment(self)
             vars = env_build.vars
@@ -65,7 +88,13 @@ class GDALConanFile(ConanFile):
         self.cpp_info.libdirs = ["lib"]
 
     def package(self):
-        self.copy("*", dst="include/gdal", src="build/include")
-        self.copy("*.h", dst="include/gdal/port", src="gdal/port")
-        self.copy("*.cpp", dst="include/gdal/port", src="gdal/port")
-        self.copy("*", dst="lib", src="build/lib", keep_path=False)
+        if self.settings.os == "Windows":
+            self.copy("*", dst="include/gdal", src="build/include")
+            self.copy("*.h", dst="include/gdal/port", src="gdal/port")
+            self.copy("*.cpp", dst="include/gdal/port", src="gdal/port")
+            self.copy("*", dst="lib", src="build/lib", keep_path=False)
+        else:
+            self.copy("*", dst="include/gdal", src="install/include")
+            self.copy("*.h", dst="include/gdal/port", src="gdal/port")
+            self.copy("*.cpp", dst="include/gdal/port", src="gdal/port")
+            self.copy("*", dst="lib", src="install/lib", keep_path=False)

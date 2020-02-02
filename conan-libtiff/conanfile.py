@@ -38,18 +38,18 @@ class LibtiffConan(ConanFile):
         cmake.definitions['CMAKE_INSTALL_LIBDIR'] = 'lib'
         cmake.definitions['CMAKE_INSTALL_BINDIR'] = 'bin'
         cmake.definitions['CMAKE_INSTALL_INCLUDEDIR'] = 'include'
+        zlib = "lib" + self.deps_cpp_info["zlib"].libs[0] + ".a"
+        jpeglib = "lib" + self.deps_cpp_info["libjpeg"].libs[0] + ".a"
+        if self.settings.os == "Windows":
+            zlib = self.deps_cpp_info["zlib"].libs[0]+'.lib'
+            jpeglib = self.deps_cpp_info["libjpeg"].libs[0]+'.lib'
 
         cmake.definitions["lzma"] = False
         cmake.definitions["jpeg"] = True
         cmake.definitions['ZLIB_INCLUDE_DIR'] =  self.deps_cpp_info["zlib"].include_paths[0]
-        cmake.definitions['ZLIB_LIBRARY'] =  os.path.join(self.deps_cpp_info["zlib"].lib_paths[0],
-                self.deps_cpp_info["zlib"].libs[0]+'.lib')
-#        cmake.definitions['LIBLZMA_INCLUDE_DIR'] =  self.deps_cpp_info["lzma"].include_paths[0]
-#        cmake.definitions['LIBLZMA_LIBRARY'] =  os.path.join(self.deps_cpp_info["lzma"].lib_paths[0],
-#                self.deps_cpp_info["lzma"].libs[0]+'.lib')
+        cmake.definitions['ZLIB_LIBRARY'] =  os.path.join(self.deps_cpp_info["zlib"].lib_paths[0], zlib)
         cmake.definitions['JPEG_INCLUDE_DIR'] =  self.deps_cpp_info["libjpeg"].include_paths[0]
-        cmake.definitions['JPEG_LIBRARY'] =  os.path.join(self.deps_cpp_info["libjpeg"].lib_paths[0],
-                self.deps_cpp_info["libjpeg"].libs[0]+'.lib')
+        cmake.definitions['JPEG_LIBRARY'] =  os.path.join(self.deps_cpp_info["libjpeg"].lib_paths[0], jpeglib)
 
         cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
         cmake.configure(source_folder=self._source_subfolder)

@@ -57,9 +57,9 @@ class OpenCVConan(ConanFile):
                        "dc1394": True,
                        "carotene": False,
                        "cuda": False,
-                       "protobuf": True,
+                       "protobuf": False,
                        "freetype": True,
-                       "harfbuzz": True,
+                       "harfbuzz": False,
                        "eigen": True,
                        'glog': True,
                        "gflags": True,
@@ -163,7 +163,7 @@ class OpenCVConan(ConanFile):
         if self.options.protobuf:
             # NOTE : version should be the same as used in OpenCV release,
             # otherwise, PROTOBUF_UPDATE_FILES should be set to re-generate files
-            self.requires.add('protobuf/3.5.2@bincrafters/stable')
+            self.requires.add('protobuf/3.9.1')
         if self.options.eigen:
             self.requires.add('eigen/3.3.7@conan/stable')
         if self.options.gstreamer:

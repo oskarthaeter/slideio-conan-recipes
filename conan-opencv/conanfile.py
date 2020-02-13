@@ -51,7 +51,7 @@ class OpenCVConan(ConanFile):
                        "webp": True,
                        "png": False,
                        "jasper": False,
-                       "openexr": True,
+                       "openexr": False,
                        "gtk": None,
                        "nonfree": False,
                        "dc1394": True,

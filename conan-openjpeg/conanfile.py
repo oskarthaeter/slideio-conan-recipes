@@ -41,6 +41,8 @@ class OpenjpegConan(ConanFile):
         cmake.definitions['BUILD_PKGCONFIG_FILES'] = False
         cmake.definitions['CMAKE_INSTALL_SYSTEM_RUNTIME_LIBS_SKIP'] = True
         cmake.definitions['BUILD_CODEC'] = False
+        if self.settings.os == "Linux":
+            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = True
 
         libs = ["zlib","libtiff","lcms"]
         lib_names = {}

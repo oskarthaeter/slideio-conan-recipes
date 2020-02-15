@@ -29,6 +29,7 @@ class GDALConanFile(ConanFile):
     def build_Linux(self):
         autotools = AutoToolsBuildEnvironment(self)
         env_build_vars = autotools.vars
+        autotools.fpic = True
         autotools.library_paths.append(self.deps_cpp_info["proj"].lib_paths[0])
         autotools.library_paths.append(self.deps_cpp_info["sqlite3"].lib_paths[0])
         autotools.libs.append(self.deps_cpp_info["sqlite3"].libs[0])

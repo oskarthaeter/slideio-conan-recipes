@@ -23,6 +23,8 @@ class JxrlibConan(ConanFile):
 
     def _configure_cmake(self):
         cmake = CMake(self)
+        if self.settings.os == "Linux":
+           cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = True
         cmake.configure()
         return cmake
 

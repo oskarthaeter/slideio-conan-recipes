@@ -17,16 +17,15 @@ class LibtiffConan(ConanFile):
     exports = ["LICENSE.md"]
     generators = "cmake"
     settings = "os", "compiler", "build_type", "arch"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = {'shared': False, 'fPIC': True}
+    options = {"shared": [True, False]}
+    default_options = {'shared': False}
     requires = "zlib/1.2.11", "libjpeg/9c" #, "lzma/5.2.4@bincrafters/stable"
 
     _source_subfolder = "source_subfolder"
 
     def config_options(self):
         if self.settings.os == "Windows":
-            self.options.remove("fPIC")
-        del self.settings.compiler.libcxx
+            del self.settings.compiler.libcxx
 
     def source(self):
         tools.get("http://download.osgeo.org/libtiff/tiff-{0}.zip".format(self.version))
@@ -43,6 +42,8 @@ class LibtiffConan(ConanFile):
         if self.settings.os == "Windows":
             zlib = self.deps_cpp_info["zlib"].libs[0]+'.lib'
             jpeglib = self.deps_cpp_info["libjpeg"].libs[0]+'.lib'
+        else:
+            cmake.definitions['CMAKE_POSITION_INDEPENDENT_CODE'] = True
 
         cmake.definitions["lzma"] = False
         cmake.definitions["jpeg"] = True

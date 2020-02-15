@@ -34,7 +34,7 @@ class GDALConanFile(ConanFile):
         autotools.library_paths.append(self.deps_cpp_info["sqlite3"].lib_paths[0])
         autotools.libs.append(self.deps_cpp_info["sqlite3"].libs[0])
         install_dir = os.path.join(self.build_folder,"install")
-        options = ["--prefix="+install_dir, "--enable-shared=no", "--enable-static=yes"]
+        options = ["--prefix="+install_dir, "--enable-shared=no", "--enable-static=yes", "CXXFLAGS=-fPIC","CFLAGS=-fPIC"]
         if self.settings.build_type == "Debug":
             options.append("--enable-debug=yes")
         os.chdir("gdal")

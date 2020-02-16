@@ -10,7 +10,7 @@ class GDALConanFile(ConanFile):
     settings = "os", "arch", "compiler", "build_type"
     description = "GDAL Library."
     short_paths = True
-    requires =  "sqlite3/3.29.0", \
+    requires =  "sqlite3/3.29.0@local/stable", \
                 "proj/6.2.1@local/stable", \
                 "jasper/2.0.14", \
                 "libjpeg/9c", \

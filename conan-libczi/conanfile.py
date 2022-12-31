@@ -28,7 +28,7 @@ class libCZIConan(ConanFile):
     def package(self):
         build_type_name = str(self.settings.build_type)
         lib_src = "Src/libCZI/" + build_type_name
-        self.copy("libCZI*.h", dst="include/libCZI", src="Src/libCZI")
+        self.copy("*.h", dst="include/libCZI", src="Src/libCZI")
         self.copy("libCZIStatic.*", dst="lib", src=lib_src, keep_path=False)
 
     def package_info(self):

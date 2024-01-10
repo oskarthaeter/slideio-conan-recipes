@@ -9,7 +9,7 @@ class PROJConan(ConanFile):
     generators = "cmake"
     settings = "os", "arch", "compiler", "build_type"
     description = "PROJ Library."
-    requires =  "sqlite3/3.29.0@local/stable"
+    requires =  "sqlite3/3.44.2"
     default_options = "sqlite3:shared=False"
     def source(self):
         git = tools.Git()
